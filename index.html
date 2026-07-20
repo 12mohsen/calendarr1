@@ -131,75 +131,81 @@ body {
   border: 0;
 }
 
-.wheel {
-  position: relative;
-  height: 162px;
-  overflow-y: auto;
-  scroll-snap-type: y mandatory;
-  overscroll-behavior-y: contain;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
-  border: 1px solid #20293a;
+.offset-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  border: 1px solid #7a5c1e;
+  border-radius: 12px;
+  background: #2a1f08;
+  color: #f0c860;
+  font-size: 13px;
+  font-weight: 600;
+}
+.offset-badge[hidden] { display: none; }
+.reset-offset-btn {
+  border: 1px solid #f0c860;
+  border-radius: 10px;
+  background: transparent;
+  color: #f0c860;
+  padding: 4px 10px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.reset-offset-btn:hover { background: rgba(240, 200, 96, 0.15); }
+
+.stepper {
+  display: grid;
+  gap: 8px;
+  justify-items: stretch;
+}
+.step-btn {
+  height: 38px;
+  border: 1px solid #2a3242;
+  border-radius: 12px;
+  background: #0d1220;
+  color: var(--gold);
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, transform 0.08s ease;
+}
+.step-btn:hover { background: #151d2e; }
+.step-btn:active { transform: scale(0.95); }
+.picker-select {
+  width: 100%;
+  height: 52px;
+  text-align: center;
+  text-align-last: center;
+  border: 1px solid #2a3242;
   border-radius: 14px;
   background: #06080d;
-  scrollbar-width: none;
-  padding: 61px 0;
-}
-
-.wheel::-webkit-scrollbar {
-  width: 0;
-}
-
-.wheel::before {
-  content: "";
-  position: sticky;
-  display: block;
-  top: 61px;
-  height: 40px;
-  margin-bottom: -40px;
-  border-radius: 10px;
-  background: linear-gradient(90deg, rgba(120, 136, 168, 0.07), rgba(120, 136, 168, 0.14));
-  border: 1px solid rgba(120, 136, 168, 0.28);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.wheel-option {
-  display: block;
-  width: 100%;
-  height: 40px;
-  border: 0;
-  background: transparent;
-  color: #99a8bf;
-  font-size: 15px;
-  scroll-snap-align: center;
+  color: var(--gold);
+  font-size: 20px;
+  font-weight: 700;
+  font-family: inherit;
   cursor: pointer;
-  transition: color 0.2s ease, transform 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0 4px;
+}
+.picker-select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+.picker-select option {
+  background: #06080d;
+  color: #e6e6e6;
+  font-weight: 600;
 }
 
-.wheel-option.today {
-  color: #1a1407;
-  background: linear-gradient(90deg, rgba(235, 209, 139, 0.92), rgba(240, 214, 143, 0.96));
-  border-radius: 10px;
-  width: calc(100% - 10px);
-  margin-inline: auto;
-  font-weight: 700;
-}
-
-.wheel-option.selected {
-  color: #fff8e0;
-  font-weight: 700;
-  transform: scale(1.03);
-}
-
-.result-card {
-  margin-top: 14px;
-  border: 1px solid #4f3c0d;
-  background: radial-gradient(circle at 50% -20%, #2b220d 0, #0b0906 65%);
-  border-radius: 24px;
-  padding: 16px 14px 22px;
-  text-align: center;
-}
 
 .result-header {
   display: flex;
@@ -477,18 +483,27 @@ input[type="number"] {
         <div class="picker-grid">
           <div class="field">
             <label id="labelDay" for="daySelect">اليوم</label>
-            <div id="dayWheel" class="wheel" data-field="day" aria-hidden="true"></div>
-            <select id="daySelect" class="sr-only"></select>
+            <div class="stepper">
+              <button type="button" class="step-btn" data-step="1" data-target="daySelect" aria-label="+">+</button>
+              <select id="daySelect" class="picker-select"></select>
+              <button type="button" class="step-btn" data-step="-1" data-target="daySelect" aria-label="-">−</button>
+            </div>
           </div>
           <div class="field">
             <label id="labelMonth" for="monthSelect">الشهر</label>
-            <div id="monthWheel" class="wheel" data-field="month" aria-hidden="true"></div>
-            <select id="monthSelect" class="sr-only"></select>
+            <div class="stepper">
+              <button type="button" class="step-btn" data-step="1" data-target="monthSelect" aria-label="+">+</button>
+              <select id="monthSelect" class="picker-select"></select>
+              <button type="button" class="step-btn" data-step="-1" data-target="monthSelect" aria-label="-">−</button>
+            </div>
           </div>
           <div class="field">
             <label id="labelYear" for="yearSelect">السنة</label>
-            <div id="yearWheel" class="wheel" data-field="year" aria-hidden="true"></div>
-            <select id="yearSelect" class="sr-only"></select>
+            <div class="stepper">
+              <button type="button" class="step-btn" data-step="1" data-target="yearSelect" aria-label="+">+</button>
+              <select id="yearSelect" class="picker-select"></select>
+              <button type="button" class="step-btn" data-step="-1" data-target="yearSelect" aria-label="-">−</button>
+            </div>
           </div>
         </div>
       </section>
@@ -508,6 +523,10 @@ input[type="number"] {
         <p id="fullDateText" class="big-date">-</p>
         <p id="monthNameText" class="month-name">-</p>
         <p id="offsetText" class="offset-text">0 يوم</p>
+        <div id="offsetBadge" class="offset-badge" hidden>
+          <span id="offsetBadgeText">تعديل يدوي مُفعّل</span>
+          <button id="resetOffsetBtn" type="button" class="reset-offset-btn">إلغاء التعديل</button>
+        </div>
         <div class="clock-section">
           <div class="clock-display">
             <span id="clockTime" class="clock-time">--:--:--</span>
@@ -527,14 +546,8 @@ input[type="number"] {
       <form method="dialog" class="dialog-content">
         <h3 id="dialogTitle">تعديل التاريخ</h3>
 
-        <label id="dialogOffsetLabel" class="dialog-label" for="offsetInput">إضافة / إنقاص أيام</label>
+        <label id="dialogOffsetLabel" class="dialog-label" for="offsetInput">تعديل التاريخ الهجري (± يوم)</label>
         <input id="offsetInput" type="number" value="0" min="-5000" max="5000" />
-
-        <p id="dialogMonthLengthLabel" class="dialog-label">طول الشهر الهجري</p>
-        <div class="radio-row">
-          <label id="monthLen30Label"><input type="radio" name="monthLength" value="30" checked /> <span>30 يوم</span></label>
-          <label id="monthLen29Label"><input type="radio" name="monthLength" value="29" /> <span>29 يوم</span></label>
-        </div>
 
         <div class="dialog-actions">
           <button type="button" id="cancelDialogBtn" class="ghost-btn">إلغاء</button>
@@ -598,7 +611,7 @@ const i18n = {
     offsetElapsed: "مضى",
     offsetRemaining: "متبقي",
     dialogTitle: "تعديل التاريخ",
-    dialogOffsetLabel: "إضافة / إنقاص أيام",
+    dialogOffsetLabel: "تعديل التاريخ الهجري (± يوم)",
     dialogMonthLengthLabel: "طول الشهر الهجري",
     monthLen30: "30 يوم",
     monthLen29: "29 يوم",
@@ -623,7 +636,7 @@ const i18n = {
     offsetElapsed: "Elapsed",
     offsetRemaining: "Remaining",
     dialogTitle: "Edit Date",
-    dialogOffsetLabel: "Add / Subtract Days",
+    dialogOffsetLabel: "Hijri Date Correction (± days)",
     dialogMonthLengthLabel: "Hijri Month Length",
     monthLen30: "30 days",
     monthLen29: "29 days",
@@ -654,13 +667,13 @@ const state = {
 const daySelect = document.getElementById("daySelect");
 const monthSelect = document.getElementById("monthSelect");
 const yearSelect = document.getElementById("yearSelect");
-const dayWheel = document.getElementById("dayWheel");
-const monthWheel = document.getElementById("monthWheel");
-const yearWheel = document.getElementById("yearWheel");
 const weekdayText = document.getElementById("weekdayText");
 const fullDateText = document.getElementById("fullDateText");
 const monthNameText = document.getElementById("monthNameText");
 const offsetText = document.getElementById("offsetText");
+const offsetBadge = document.getElementById("offsetBadge");
+const offsetBadgeText = document.getElementById("offsetBadgeText");
+const resetOffsetBtn = document.getElementById("resetOffsetBtn");
 const editBtn = document.getElementById("editBtn");
 const todayBtn = document.getElementById("todayBtn");
 const editDialog = document.getElementById("editDialog");
@@ -675,8 +688,6 @@ const calendarIconDay = document.getElementById("calendarIconDay");
 const calendarIconMonth = document.getElementById("calendarIconMonth");
 
 const arabicWeekday = new Intl.DateTimeFormat("ar", { weekday: "long" });
-const wheelTimers = new WeakMap();
-const wheelScrollRaf = new WeakMap();
 const STORAGE_KEY = "calendar_app_state_v1";
 
 function toArabicDigits(value) {
@@ -691,6 +702,7 @@ function saveAppState() {
     selectedHijriDate: state.selectedHijriDate.toISOString(),
     dayOffsetByMode: state.dayOffsetByMode,
     hijriMonthLength: state.hijriMonthLength,
+    calendarVersion: 3,
     clockMode: state.clockMode,
     lang: state.lang,
   };
@@ -707,7 +719,9 @@ function loadAppState() {
       state.mode = parsed.mode;
     }
 
-    if (parsed.dayOffsetByMode && typeof parsed.dayOffsetByMode === "object") {
+    // Offsets saved before the calendar was corrected were compensating for an
+    // old, wrong algorithm. They are dropped once so nobody inherits them.
+    if (parsed.calendarVersion === 3 && parsed.dayOffsetByMode && typeof parsed.dayOffsetByMode === "object") {
       if (Number.isFinite(parsed.dayOffsetByMode.gregorian)) {
         state.dayOffsetByMode.gregorian = Number(parsed.dayOffsetByMode.gregorian);
       }
@@ -732,14 +746,34 @@ function loadAppState() {
   }
 }
 
-function getHijriParts(date) {
-  return gregorianToHijri(date.getFullYear(), date.getMonth() + 1, date.getDate());
+// The offset is a HIJRI CALENDAR CORRECTION only.
+// It never moves the real (Gregorian) day, so the weekday always stays correct.
+function getHijriOffset() {
+  return Number(state.dayOffsetByMode.hijri) || 0;
 }
 
-function adjustDateWithOffset(baseDate, mode) {
-  const adjusted = new Date(baseDate);
-  adjusted.setDate(adjusted.getDate() + state.dayOffsetByMode[mode]);
-  return adjusted;
+function setHijriOffset(value) {
+  const n = Number(value) || 0;
+  state.dayOffsetByMode.hijri = n;
+  state.dayOffsetByMode.gregorian = n;
+}
+
+function shiftDays(date, days) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+// Real Gregorian date -> corrected Hijri date
+function getHijriParts(date) {
+  const shifted = shiftDays(date, getHijriOffset());
+  return gregorianToHijri(shifted.getFullYear(), shifted.getMonth() + 1, shifted.getDate());
+}
+
+// Corrected Hijri date -> real Gregorian date (exact inverse of getHijriParts)
+function hijriToTrueGregorian(year, month, day) {
+  return shiftDays(hijriToGregorianDate(year, month, day), -getHijriOffset());
 }
 
 function normalizeToUtcDay(date) {
@@ -777,7 +811,7 @@ function getDayWord(count) {
 
 function formatDifferenceAsMonthsAndDays(totalDays) {
   const absDays = Math.abs(totalDays);
-  const monthLength = state.hijriMonthLength;
+  const monthLength = 30;
   const totalMonths = Math.floor(absDays / monthLength);
   const days = absDays % monthLength;
   const years = Math.floor(totalMonths / 12);
@@ -830,12 +864,12 @@ function createDateSafe(year, monthIndex, day) {
 }
 
 function getDaysInCurrentSelection() {
+  const y = Number(yearSelect.value);
+  const m = Number(monthSelect.value);
   if (state.mode === "gregorian") {
-    const y = Number(yearSelect.value);
-    const m = Number(monthSelect.value);
     return getDaysInGregorianMonth(y, m - 1);
   }
-  return state.hijriMonthLength;
+  return getHijriMonthLength(y, m);
 }
 
 function gregorianToJdn(year, month, day) {
@@ -888,11 +922,211 @@ function jdnToHijri(jdn) {
   return { year, month, day };
 }
 
+// ---- Online source: Aladhan free API (api.aladhan.com) ----
+// Purely an enhancement. Results are cached in localStorage and the app falls
+// back to the built-in Umm al-Qura calculation when offline or if the API fails.
+const API_BASE = "https://api.aladhan.com/v1";
+const API_CACHE_KEY = "calendar_app_api_cache_v1";
+const API_CACHE_LIMIT = 3000;
+const apiHijriCache = new Map();
+const apiMonthsRequested = new Set();
+
+function gregorianKey(year, month, day) {
+  return year + "-" + month + "-" + day;
+}
+
+function loadApiCache() {
+  try {
+    const raw = window.localStorage.getItem(API_CACHE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    Object.keys(parsed).forEach((key) => {
+      const v = parsed[key];
+      if (v && Number.isFinite(v.y) && Number.isFinite(v.m) && Number.isFinite(v.d)) {
+        apiHijriCache.set(key, { year: v.y, month: v.m, day: v.d });
+      }
+    });
+  } catch {
+    // Corrupted cache is simply ignored.
+  }
+}
+
+function saveApiCache() {
+  try {
+    const entries = Array.from(apiHijriCache.entries()).slice(-API_CACHE_LIMIT);
+    const payload = {};
+    entries.forEach(([key, v]) => {
+      payload[key] = { y: v.year, m: v.month, d: v.day };
+    });
+    window.localStorage.setItem(API_CACHE_KEY, JSON.stringify(payload));
+  } catch {
+    // Storage full or unavailable: the in-memory cache still works.
+  }
+}
+
+// Fetches a whole Gregorian month in one request (cheap, covers the whole picker).
+async function fetchHijriMonthFromApi(year, month) {
+  const key = year + "/" + month;
+  if (apiMonthsRequested.has(key)) return false;
+  if (typeof fetch !== "function") return false;
+  if (typeof navigator !== "undefined" && navigator.onLine === false) return false;
+  apiMonthsRequested.add(key);
+
+  try {
+    const controller = typeof AbortController === "function" ? new AbortController() : null;
+    const timer = controller ? window.setTimeout(() => controller.abort(), 8000) : null;
+    const response = await fetch(`${API_BASE}/gToHCalendar/${month}/${year}`, {
+      signal: controller ? controller.signal : undefined,
+    });
+    if (timer) window.clearTimeout(timer);
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const payload = await response.json();
+    const days = Array.isArray(payload && payload.data) ? payload.data : [];
+    if (days.length === 0) throw new Error("empty response");
+
+    let changed = false;
+    days.forEach((entry) => {
+      const g = entry && entry.gregorian;
+      const h = entry && entry.hijri;
+      if (!g || !h || !g.month || !h.month) return;
+      const gy = Number(g.year);
+      const gm = Number(g.month.number);
+      const gd = Number(g.day);
+      const value = { year: Number(h.year), month: Number(h.month.number), day: Number(h.day) };
+      if (![gy, gm, gd, value.year, value.month, value.day].every(Number.isFinite)) return;
+      const cacheKey = gregorianKey(gy, gm, gd);
+      const previous = apiHijriCache.get(cacheKey);
+      if (!previous || previous.year !== value.year || previous.month !== value.month || previous.day !== value.day) {
+        apiHijriCache.set(cacheKey, value);
+        changed = true;
+      }
+    });
+
+    if (changed) {
+      saveApiCache();
+      hijriMonthLengthCache.clear();
+    }
+    return changed;
+  } catch {
+    apiMonthsRequested.delete(key); // allow a retry later
+    return false;
+  }
+}
+
+// Warms the cache around the date on screen, then refreshes the view if the
+// online source disagreed with the local calculation.
+function syncWithApi(date) {
+  const targets = [];
+  const base = new Date(date);
+  [-1, 0, 1].forEach((delta) => {
+    const d = new Date(base.getFullYear(), base.getMonth() + delta, 1);
+    targets.push([d.getFullYear(), d.getMonth() + 1]);
+  });
+
+  Promise.all(targets.map(([y, m]) => fetchHijriMonthFromApi(y, m)))
+    .then((results) => {
+      if (results.some(Boolean) && typeof renderResult === "function") {
+        refillDayOptions();
+        renderResult();
+      }
+    })
+    .catch(() => {});
+}
+
+// ---- Umm al-Qura calendar (matches the official Saudi / Google calendar) ----
+// The old tabular algorithm was ~1 day off. Intl exposes the real Umm al-Qura
+// data, so conversions and month lengths are now exact instead of estimated.
+let umalquraFmt = null;
+function getUmalquraFmt() {
+  if (umalquraFmt === null) {
+    try {
+      umalquraFmt = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+      });
+      // Verify the engine really honours the calendar; fall back if not.
+      const probe = umalquraFmt.formatToParts(new Date(Date.UTC(2026, 6, 16, 12)));
+      if (!probe.some((part) => part.type === "year")) umalquraFmt = false;
+    } catch {
+      umalquraFmt = false;
+    }
+  }
+  return umalquraFmt;
+}
+
 function gregorianToHijri(year, month, day) {
-  return jdnToHijri(gregorianToJdn(year, month, day));
+  const cached = apiHijriCache.get(gregorianKey(year, month, day));
+  if (cached) return { year: cached.year, month: cached.month, day: cached.day };
+
+  const fmt = getUmalquraFmt();
+  if (!fmt) return jdnToHijri(gregorianToJdn(year, month, day));
+  const noon = createDateSafe(year, month - 1, day);
+  noon.setHours(12, 0, 0, 0);
+  const parts = fmt.formatToParts(noon);
+  const pick = (type) => {
+    const found = parts.find((part) => part.type === type);
+    return found ? Number(String(found.value).replace(/[^0-9]/g, "")) : NaN;
+  };
+  const result = { year: pick("year"), month: pick("month"), day: pick("day") };
+  if (!Number.isFinite(result.year) || !Number.isFinite(result.month) || !Number.isFinite(result.day)) {
+    return jdnToHijri(gregorianToJdn(year, month, day));
+  }
+  return result;
+}
+
+function hijriKey(parts) {
+  return parts.year * 10000 + parts.month * 100 + parts.day;
+}
+
+// Inverse of gregorianToHijri: converge on the Gregorian day whose
+// Umm al-Qura date equals the requested one.
+function hijriToGregorianExact(year, month, day) {
+  const target = year * 10000 + month * 100 + day;
+  let guess = jdnToGregorian(hijriToJdn(year, month, day));
+  let date = createDateSafe(guess.year, guess.month - 1, guess.day);
+
+  const visited = new Set();
+  for (let i = 0; i < 90; i += 1) {
+    const stamp = date.getTime();
+    // A mixed cache (API for some days, local for others) could make the search
+    // bounce between two days; stop instead of looping.
+    if (visited.has(stamp)) return null;
+    visited.add(stamp);
+
+    const current = gregorianToHijri(date.getFullYear(), date.getMonth() + 1, date.getDate());
+    const currentKey = hijriKey(current);
+    if (currentKey === target) return date;
+    const direction = currentKey < target ? 1 : -1;
+    const monthsApart = Math.abs((year * 12 + month) - (current.year * 12 + current.month));
+    const jump = monthsApart > 0 ? Math.max(1, Math.round(monthsApart * 29.5) - 2) : Math.abs(day - current.day);
+    date = createDateSafe(date.getFullYear(), date.getMonth(), date.getDate() + direction * Math.max(1, jump));
+  }
+  return null;
+}
+
+// Real length of a specific Hijri month (29 or 30) - no longer a manual setting.
+const hijriMonthLengthCache = new Map();
+function getHijriMonthLength(year, month) {
+  const key = year * 100 + month;
+  if (hijriMonthLengthCache.has(key)) return hijriMonthLengthCache.get(key);
+  const start = hijriToGregorianExact(year, month, 1);
+  const nextYear = month === 12 ? year + 1 : year;
+  const nextMonth = month === 12 ? 1 : month + 1;
+  const next = hijriToGregorianExact(nextYear, nextMonth, 1);
+  let length = 30;
+  if (start && next) {
+    const diff = Math.round((next.getTime() - start.getTime()) / 86400000);
+    if (diff === 29 || diff === 30) length = diff;
+  }
+  hijriMonthLengthCache.set(key, length);
+  return length;
 }
 
 function hijriToGregorianDate(year, month, day) {
+  const exact = hijriToGregorianExact(year, month, day);
+  if (exact) return exact;
   const g = jdnToGregorian(hijriToJdn(year, month, day));
   return createDateSafe(g.year, g.month - 1, g.day);
 }
@@ -909,119 +1143,11 @@ function getTodayPartsForCurrentMode() {
   return getHijriParts(today);
 }
 
-function renderWheelFromSelect(selectEl, wheelEl, fieldName) {
-  const selectedValue = selectEl.value;
-  const todayParts = getTodayPartsForCurrentMode();
-  wheelEl.innerHTML = "";
 
-  Array.from(selectEl.options).forEach((option) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "wheel-option";
-    button.dataset.value = option.value;
-    button.textContent = option.textContent;
-    if (option.value === selectedValue) {
-      button.classList.add("selected");
-    }
-    if (Number(option.value) === todayParts[fieldName]) {
-      button.classList.add("today");
-    }
-    wheelEl.appendChild(button);
-  });
 
-  syncWheelPosition(wheelEl, false);
-}
 
-function syncWheelPosition(wheelEl, smooth = true) {
-  const selected = wheelEl.querySelector(".wheel-option.selected");
-  if (!selected) return;
-  const top = selected.offsetTop - wheelEl.clientHeight / 2 + selected.clientHeight / 2;
-  wheelEl.scrollTo({ top, behavior: smooth ? "smooth" : "auto" });
-}
 
-function syncAllWheels() {
-  renderWheelFromSelect(daySelect, dayWheel, "day");
-  renderWheelFromSelect(monthSelect, monthWheel, "month");
-  renderWheelFromSelect(yearSelect, yearWheel, "year");
-}
 
-function setSelectedOptionFromWheel(wheelEl, selectEl, triggerChange) {
-  const options = Array.from(wheelEl.querySelectorAll(".wheel-option"));
-  if (options.length === 0) return;
-
-  const center = wheelEl.scrollTop + wheelEl.clientHeight / 2;
-  let best = options[0];
-  let bestDistance = Number.POSITIVE_INFINITY;
-
-  options.forEach((option) => {
-    const itemCenter = option.offsetTop + option.clientHeight / 2;
-    const distance = Math.abs(itemCenter - center);
-    if (distance < bestDistance) {
-      best = option;
-      bestDistance = distance;
-    }
-  });
-
-  options.forEach((option) => option.classList.remove("selected"));
-  best.classList.add("selected");
-
-  const nextValue = best.dataset.value;
-  const changed = selectEl.value !== nextValue;
-  selectEl.value = nextValue;
-  syncWheelPosition(wheelEl, false);
-
-  if (triggerChange && changed) {
-    selectEl.dispatchEvent(new Event("change", { bubbles: true }));
-  }
-}
-
-function markNearestOptionOnly(wheelEl) {
-  const options = Array.from(wheelEl.querySelectorAll(".wheel-option"));
-  if (options.length === 0) return;
-  const center = wheelEl.scrollTop + wheelEl.clientHeight / 2;
-  let nearest = options[0];
-  let bestDistance = Number.POSITIVE_INFINITY;
-
-  options.forEach((option) => {
-    const itemCenter = option.offsetTop + option.clientHeight / 2;
-    const distance = Math.abs(itemCenter - center);
-    if (distance < bestDistance) {
-      nearest = option;
-      bestDistance = distance;
-    }
-  });
-
-  options.forEach((option) => option.classList.remove("selected"));
-  nearest.classList.add("selected");
-}
-
-function setupWheelEvents(wheelEl, selectEl) {
-  wheelEl.addEventListener("click", (event) => {
-    const clicked = event.target.closest(".wheel-option");
-    if (!clicked) return;
-    selectEl.value = clicked.dataset.value;
-    selectEl.dispatchEvent(new Event("change", { bubbles: true }));
-  });
-
-  wheelEl.addEventListener("scroll", () => {
-    if (!wheelScrollRaf.get(wheelEl)) {
-      const rafId = requestAnimationFrame(() => {
-        markNearestOptionOnly(wheelEl);
-        wheelScrollRaf.delete(wheelEl);
-      });
-      wheelScrollRaf.set(wheelEl, rafId);
-    }
-
-    const oldTimer = wheelTimers.get(wheelEl);
-    if (oldTimer) window.clearTimeout(oldTimer);
-
-    const newTimer = window.setTimeout(() => {
-      setSelectedOptionFromWheel(wheelEl, selectEl, true);
-      wheelTimers.delete(wheelEl);
-    }, 90);
-    wheelTimers.set(wheelEl, newTimer);
-  });
-}
 
 function refillDayOptions() {
   const current = Number(daySelect.value || 1);
@@ -1034,7 +1160,6 @@ function refillDayOptions() {
     daySelect.appendChild(option);
   }
   daySelect.value = String(Math.min(current, maxDays));
-  renderWheelFromSelect(daySelect, dayWheel, "day");
 }
 
 function fillMonthOptions() {
@@ -1053,7 +1178,6 @@ function fillMonthOptions() {
     }
     monthSelect.appendChild(option);
   });
-  renderWheelFromSelect(monthSelect, monthWheel, "month");
 }
 
 function fillYearOptions() {
@@ -1075,7 +1199,6 @@ function fillYearOptions() {
     option.textContent = toArabicDigits(y);
     yearSelect.appendChild(option);
   }
-  renderWheelFromSelect(yearSelect, yearWheel, "year");
 }
 
 function loadSelectorsFromCurrentDate() {
@@ -1092,7 +1215,7 @@ function loadSelectorsFromCurrentDate() {
     yearSelect.value = String(hijri.year);
     monthSelect.value = String(hijri.month);
     refillDayOptions();
-    daySelect.value = String(Math.min(hijri.day, state.hijriMonthLength));
+    daySelect.value = String(Math.min(hijri.day, getHijriMonthLength(hijri.year, hijri.month)));
   }
 }
 
@@ -1107,10 +1230,10 @@ function getDateFromSelectors() {
 
   // Resolve exact Hijri date; if selected day is invalid for the month,
   // clamp to nearest valid day to keep calculation continuous.
-  const maxHijriDay = state.hijriMonthLength;
+  const maxHijriDay = getHijriMonthLength(year, month);
   for (let tryDay = day; tryDay >= 1; tryDay -= 1) {
     if (tryDay <= maxHijriDay) {
-      return hijriToGregorianDate(year, month, tryDay);
+      return hijriToTrueGregorian(year, month, tryDay);
     }
   }
   return new Date(state.selectedHijriDate);
@@ -1118,7 +1241,9 @@ function getDateFromSelectors() {
 
 function renderResult() {
   const picked = getDateFromSelectors();
-  const adjusted = adjustDateWithOffset(picked, state.mode);
+  // `picked` is already the real Gregorian day; the offset only affects
+  // the Hijri conversion, so the weekday below is never shifted.
+  const adjusted = picked;
   const hijri = getHijriParts(adjusted);
   const today = new Date();
   const dateDiffInDays = calculateDateDifferenceInDays(adjusted, today);
@@ -1142,6 +1267,24 @@ function renderResult() {
     fullDateText.textContent = `${toArabicDigits(hijri.year)}/${toArabicDigits(hijri.month)}/${toArabicDigits(hijri.day)}`;
     monthNameText.textContent = (isEn ? hijriMonthNamesEn : hijriMonthNames)[hijri.month - 1] || "-";
   }
+  // Make any manual correction impossible to forget about.
+  const activeOffset = getHijriOffset();
+  if (offsetBadge) {
+    if (activeOffset === 0) {
+      offsetBadge.hidden = true;
+    } else {
+      offsetBadge.hidden = false;
+      const sign = activeOffset > 0 ? "+" : "-";
+      const size = Math.abs(activeOffset);
+      offsetBadgeText.textContent = isEn
+        ? `Manual correction: ${sign}${size} day${size === 1 ? "" : "s"} on the Hijri date`
+        : `تعديل يدوي على التاريخ الهجري: ${sign}${toArabicDigits(size)} ${getDayWord(size)}`;
+      resetOffsetBtn.textContent = isEn ? "Reset" : "إلغاء التعديل";
+    }
+  }
+
+  syncWithApi(adjusted);
+
   const diffText = formatDifferenceAsMonthsAndDays(dateDiffInDays);
   if (dateDiffInDays < 0) {
     offsetText.textContent = `${t.offsetElapsed} ${diffText}`;
@@ -1156,7 +1299,6 @@ function setupSelectors() {
   fillYearOptions();
   fillMonthOptions();
   loadSelectorsFromCurrentDate();
-  syncAllWheels();
   renderResult();
 }
 
@@ -1198,19 +1340,31 @@ daySelect.addEventListener("change", () => {
   saveAppState();
 });
 
-setupWheelEvents(dayWheel, daySelect);
-setupWheelEvents(monthWheel, monthSelect);
-setupWheelEvents(yearWheel, yearSelect);
+
+// Native selects + explicit stepper buttons: the value can only ever change
+// because the user chose it. No scroll maths, so nothing can drift.
+document.querySelectorAll(".step-btn").forEach((button) => {
+  button.addEventListener("click", () => {
+    const selectEl = document.getElementById(button.dataset.target);
+    if (!selectEl || selectEl.options.length === 0) return;
+    const step = Number(button.dataset.step) || 0;
+    const next = selectEl.selectedIndex + step;
+    if (next < 0 || next >= selectEl.options.length) return;
+    selectEl.selectedIndex = next;
+    selectEl.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+});
 
 editBtn.addEventListener("click", () => {
-  offsetInput.value = String(state.dayOffsetByMode[state.mode]);
-  const target = document.querySelector(`input[name="monthLength"][value="${state.hijriMonthLength}"]`);
-  if (target) target.checked = true;
-  const monthLengthInputs = document.querySelectorAll('input[name="monthLength"]');
-  monthLengthInputs.forEach((input) => {
-    input.disabled = state.mode !== "hijri";
-  });
+  offsetInput.value = String(getHijriOffset());
   editDialog.showModal();
+});
+
+resetOffsetBtn.addEventListener("click", () => {
+  setHijriOffset(0);
+  saveAppState();
+  loadSelectorsFromCurrentDate();
+  renderResult();
 });
 
 todayBtn.addEventListener("click", () => {
@@ -1222,17 +1376,14 @@ cancelDialogBtn.addEventListener("click", () => {
 });
 
 editDialog.addEventListener("close", () => {
-  refillDayOptions();
+  // Rebuild from the stored real date so a changed offset is reflected.
+  loadSelectorsFromCurrentDate();
   renderResult();
 });
 
 editDialog.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault();
-  state.dayOffsetByMode[state.mode] = Number(offsetInput.value || 0);
-  if (state.mode === "hijri") {
-    const selectedMonthLength = document.querySelector('input[name="monthLength"]:checked');
-    state.hijriMonthLength = Number(selectedMonthLength?.value || 30);
-  }
+  setHijriOffset(offsetInput.value);
   saveAppState();
   editDialog.close();
 });
@@ -1294,9 +1445,6 @@ function applyLanguage() {
   editBtn.textContent = t.editBtn;
   document.getElementById("dialogTitle").textContent = t.dialogTitle;
   document.getElementById("dialogOffsetLabel").textContent = t.dialogOffsetLabel;
-  document.getElementById("dialogMonthLengthLabel").textContent = t.dialogMonthLengthLabel;
-  document.querySelector("#monthLen30Label span").textContent = t.monthLen30;
-  document.querySelector("#monthLen29Label span").textContent = t.monthLen29;
   cancelDialogBtn.textContent = t.cancelBtn;
   document.getElementById("saveDialogBtn").textContent = t.saveBtn;
   document.querySelector(".owner-label").textContent = t.ownerLabel;
@@ -1366,12 +1514,21 @@ function scheduleMidnightUpdate() {
   }, msUntil);
 }
 
+loadApiCache();
 loadAppState();
+// Always open on today rather than on whatever date was last browsed.
+state.selectedGregorianDate = new Date();
+state.selectedHijriDate = new Date();
 applyLanguage();
 switchMode(state.mode);
 startClock();
 updateCalendarIcon();
 scheduleMidnightUpdate();
+syncWithApi(new Date());
+window.addEventListener("online", () => {
+  apiMonthsRequested.clear();
+  syncWithApi(new Date());
+});
 
 </script>
   </body>
