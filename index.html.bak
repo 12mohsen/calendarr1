@@ -462,64 +462,13 @@ input[type="number"] {
   }
 }
 
-.lang-bar {
-  gap: 8px;
-}
-
-.install-btn {
-  border: 1px solid var(--gold);
-  border-radius: 999px;
-  background: rgba(235, 209, 139, 0.12);
-  color: var(--gold);
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 4px 13px;
-  cursor: pointer;
-  letter-spacing: 0.3px;
-  transition: background 0.2s, color 0.2s;
-}
-
-.install-btn:hover {
-  background: var(--gold);
-  color: #1d1607;
-}
-
-.install-btn[hidden] {
-  display: none;
-}
-
-.ios-hint {
-  margin: 8px 0 0;
-  padding: 9px 12px;
-  border: 1px solid #3a3020;
-  border-radius: 12px;
-  background: #0c0a07;
-  color: #c9b884;
-  font-size: 12.5px;
-  line-height: 1.7;
-}
-
-.ios-hint[hidden] {
-  display: none;
-}
 </style>
-    <link rel="manifest" href="manifest.webmanifest" />
-    <meta name="theme-color" content="#0a0b0f" />
-    <meta name="description" content="محوّل سريع بين التاريخ الهجري والميلادي مع ساعة وتقويم، يعمل بدون إنترنت." />
-    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="تقويم" />
   </head>
   <body>
     <main class="app-shell">
       <div class="lang-bar">
-        <button id="installBtn" class="install-btn" type="button" hidden>تثبيت التطبيق</button>
         <button id="langToggleBtn" class="lang-toggle-btn" type="button">EN</button>
       </div>
-      <p id="iosHint" class="ios-hint" hidden></p>
 
       <section class="tabs" role="tablist" aria-label="نمط التحويل">
         <button class="tab active" id="tab-g" role="tab" aria-selected="true" data-mode="gregorian">
@@ -672,8 +621,6 @@ const i18n = {
     langToggle: "EN",
     clockToggle12: "١٢ ساعة",
     clockToggle24: "٢٤ ساعة",
-    installBtn: "تثبيت التطبيق",
-    iosHint: "للتثبيت على الآيفون أو الآيباد: افتح الصفحة في Safari، اضغط زر المشاركة، ثم اختر «إضافة إلى الشاشة الرئيسية».",
     amText: "ص",
     pmText: "م",
   },
@@ -699,8 +646,6 @@ const i18n = {
     langToggle: "عربي",
     clockToggle12: "12h",
     clockToggle24: "24h",
-    installBtn: "Install app",
-    iosHint: "To install on iPhone or iPad: open this page in Safari, tap the Share button, then choose \u201cAdd to Home Screen\u201d.",
     amText: "AM",
     pmText: "PM",
   },
@@ -739,8 +684,6 @@ const clockTimeEl = document.getElementById("clockTime");
 const clockAmPmEl = document.getElementById("clockAmPm");
 const clockToggleBtn = document.getElementById("clockToggleBtn");
 const langToggleBtn = document.getElementById("langToggleBtn");
-const installBtn = document.getElementById("installBtn");
-const iosHint = document.getElementById("iosHint");
 const calendarIconDay = document.getElementById("calendarIconDay");
 const calendarIconMonth = document.getElementById("calendarIconMonth");
 
@@ -1506,8 +1449,6 @@ function applyLanguage() {
   document.getElementById("saveDialogBtn").textContent = t.saveBtn;
   document.querySelector(".owner-label").textContent = t.ownerLabel;
   langToggleBtn.textContent = t.langToggle;
-  if (installBtn) installBtn.textContent = t.installBtn;
-  if (iosHint && !iosHint.hidden) iosHint.textContent = t.iosHint;
   updateClockToggleLabel();
   if (typeof updateCalendarIcon === "function") updateCalendarIcon();
 }
@@ -1589,66 +1530,6 @@ window.addEventListener("online", () => {
   syncWithApi(new Date());
 });
 
-/* ---------------- PWA: install prompt + offline ---------------- */
-
-let deferredInstallPrompt = null;
-
-function isStandaloneApp() {
-  return (
-    window.matchMedia("(display-mode: standalone)").matches ||
-    window.navigator.standalone === true
-  );
-}
-
-function isIosDevice() {
-  return (
-    /iphone|ipad|ipod/i.test(navigator.userAgent) ||
-    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
-  );
-}
-
-function showInstallButton() {
-  if (!installBtn || isStandaloneApp()) return;
-  installBtn.textContent = i18n[state.lang].installBtn;
-  installBtn.hidden = false;
-}
-
-window.addEventListener("beforeinstallprompt", (event) => {
-  event.preventDefault();
-  deferredInstallPrompt = event;
-  showInstallButton();
-});
-
-if (installBtn) {
-  installBtn.addEventListener("click", async () => {
-    if (deferredInstallPrompt) {
-      deferredInstallPrompt.prompt();
-      const choice = await deferredInstallPrompt.userChoice;
-      deferredInstallPrompt = null;
-      if (choice.outcome === "accepted") installBtn.hidden = true;
-      return;
-    }
-    // No native prompt (iOS Safari, or already dismissed): show manual steps.
-    if (iosHint) {
-      iosHint.textContent = i18n[state.lang].iosHint;
-      iosHint.hidden = !iosHint.hidden;
-    }
-  });
-}
-
-window.addEventListener("appinstalled", () => {
-  deferredInstallPrompt = null;
-  if (installBtn) installBtn.hidden = true;
-  if (iosHint) iosHint.hidden = true;
-});
-
-if (isIosDevice()) showInstallButton();
-
-if ("serviceWorker" in navigator && location.protocol !== "file:") {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
-  });
-}
 </script>
   </body>
 </html>
